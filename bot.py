@@ -7,11 +7,21 @@ logging.basicConfig(filename='bot.log', level=logging.INFO)
 
 # Настройки прокси
 PROXY = {'proxy_url': settings.PROXY_URL,
-    'urllib3_proxy_kwargs': {
-        'username': settings.PROXY_USERNAME,
-        'password': settings.PROXY_PASSWORD
-    }
-}
+    'urllib3_proxy_kwargs': {'username': settings.PROXY_USERNAME, 'password': settings.PROXY_PASSWORD}}
+
+#Бот вызовет функцию greet_user, когда пользователь напишет команду /start или
+#нажмет кнопку Start при первом подключении к боту.        
+def greet_user(update, context):
+    print("Вызван /start")
+    update.message.reply_text("Здравствуй, пользователь!")
+
+
+#Напишем функцию talk_to_me, которая будет "отвечать" пользователю
+def talk_to_me(update, context):
+    text = update.message.text
+    print(text)
+    #Ответим пользователю на его сообщение при помощи update.message.reply_text():
+    update.message.reply_text(text)
 
 def main():
     # Создаем бота и передаем ему ключ для авторизации на серверах Telegram
@@ -35,21 +45,13 @@ def main():
     # Запускаем бота, он будет работать, пока мы его не остановим принудительно
     mybot.idle()
 
-#Бот вызовет функцию greet_user, когда пользователь напишет команду /start или
-#нажмет кнопку Start при первом подключении к боту.
+# В питоне есть общепринятый способ решить эту проблему. Если вам нужно вызвать 
+# функцию не внутри другой функции, она заключается в специальный блок, который 
+# исполняется только при прямом вызове файла python bot.py и не вызывается при
+#  импорте, например from bot import PROXY. Вот как это выглядит:
 
-def greet_user(update, context):
-    print('Вызван /start')
+if __name__ == "__main__":
 
-    #Ответим пользователю на его сообщение при помощи update.message.reply_text():
-    update.message.reply_text('Привет, пользователь! Ты вызвал команду /start')
+    # Вызываем функцию main() - именно эта строчка запускает бота
+    main()    
 
-# Вызываем функцию main() - именно эта строчка запускает бота
-main()    
-
-#Напишем функцию talk_to_me, которая будет "отвечать" пользователю
-
-def talk_to_me(update, context):
-    user_text = update.message.text 
-    print(user_text)
-    update.message.reply_text(user_text)
