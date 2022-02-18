@@ -1,7 +1,22 @@
-
+#Если в коде мы допустим ошибку, мы об этом не узнаем, так как авторы библиотеки 
+#для устойчивости бота "перехватывают" исключения, которые встречаются в нашем коде.
+# Нам поможет стандартный модуль логирования. Для начала, импортируем его в самом начале файла:
 import logging
+
+#Updater - это компонент отвечающий за коммуникацию с сервером 
+ #Telegram - именно он получает/передает сообщения.
+
+#Кроме работы с командами, telegram-бот может работать с текстом, картинками, аудио и видео. 
+  #MessageHandler позволяет обрабатывать все эти типы сообщений:
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
+
+#Конфигурационную информацию в отдельный файл settings.py в нем все настройки
+#API_KEY = "КЛЮЧ, КОТОРЫЙ НАМ ВЫДАЛ BotFather"
+#PROXY_URL = ""
+#PROXY_USERNAME = ""
+#PROXY_PASSWORD = ""
 import settings
+
 #Будем записывать отчет о работе бота
 logging.basicConfig(filename='bot.log', level=logging.INFO)
 
@@ -20,16 +35,19 @@ def greet_user(update, context):
 def talk_to_me(update, context):
     text = update.message.text
     print(text)
+
     #Ответим пользователю на его сообщение при помощи update.message.reply_text():
     update.message.reply_text(text)
 
+#Функция main() будет содержать в себе основной код бота.
+#Именно с ее помощью мы будем запускать бот.
 def main():
     # Создаем бота и передаем ему ключ для авторизации на серверах Telegram
     mybot = Updater(settings.API_KEY, use_context=True, request_kwargs=PROXY)
 
     #будем использовать диспетчер mybot.dispatcher для того, 
     # чтобы при наступлении события вызывалась наша функция:
-    p = mybot.dispatcher
+    dp = mybot.dispatcher
     dp.add_handler(CommandHandler("start", greet_user))
 
     #Добавим новый обработчик событий в main()
@@ -39,6 +57,7 @@ def main():
     
     #Залогируем в файл информацию о старте бота
     logging.info("Бот стартовал")
+
     # Командуем боту начать ходить в Telegram за сообщениями
     mybot.start_polling()
 
@@ -49,7 +68,6 @@ def main():
 # функцию не внутри другой функции, она заключается в специальный блок, который 
 # исполняется только при прямом вызове файла python bot.py и не вызывается при
 #  импорте, например from bot import PROXY. Вот как это выглядит:
-
 if __name__ == "__main__":
 
     # Вызываем функцию main() - именно эта строчка запускает бота
