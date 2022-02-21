@@ -17,6 +17,7 @@ from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 #PROXY_PASSWORD = ""
 import settings
 
+
 #Будем записывать отчет о работе бота
 logging.basicConfig(filename='bot.log', level=logging.INFO)
 
